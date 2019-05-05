@@ -26,20 +26,22 @@ class Route {
               while ($found === false && $i < $this->totalRoutes):
                      $route = $this->routes[$i]['route'];
                      $callback = $this->routes[$i]['callback'];
+                     $options = $this->routes[$i]['options'];
                      if ($this->check($route)) {
                             $found = true;
-                            return $this->execute($callback);
+                            return $this->execute($callback, $options);
                      }
                      $i ++;
               endwhile;
        }
 
-       public function add($route, callable $callback)
+       public function add($route, callable $callback, $options = null)
        {
               $this->totalRoutes ++;
               $this->routes[] = [
                   'route'    => $route,
-                  'callback' => $callback
+                  'callback' => $callback,
+                  'options'  => $options
               ];
        }
 
@@ -60,20 +62,20 @@ class Route {
               return implode('/', $rotaEx) == $url;
        }
 
-       private function execute($callback)
+       private function execute($callback, $options = null)
        {
               // chama a callback
               if (is_array($callback)) {
                      $class = $callback[0];
                      $method = $callback[1];
                      if (is_object($class)) {
-                            return $class->$method($this->params);
+                            return $class->$method($this->params, $options);
                      } else {
                             $obj = new $class;
-                            return $obj->$method($this->params);
+                            return $obj->$method($this->params, $options);
                      }
               } else {
-                     return $callback($this->params);
+                     return $callback($this->params, $options);
               }
        }
 
