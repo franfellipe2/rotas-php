@@ -12,6 +12,13 @@ class Route {
               $this->url = $url;
        }
 
+       /**
+        * Utilizar no final do script para rodar a aplicação e entrar na rota correta 
+        * exemplo: $routs = new Route();
+        *          $routes->add('minha-rota/{meu-parametro}', function(){...});
+        *          $routes->run();
+        * @return type
+        */
        public function run()
        {
               $found = false;
