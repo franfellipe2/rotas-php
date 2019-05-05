@@ -15,3 +15,4 @@ $rotas->add('despesas/farmacia/{nome}', function($params) {
 $rotas->add('despesas/transporte/{nome}', function($params) {
        echo $sql = 'SELECT * FROM fornecedores WHERE nome = ' . $params['nome'];
 });
+$rotas->run();

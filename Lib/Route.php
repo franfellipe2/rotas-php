@@ -5,26 +5,23 @@ class Route {
        private $url;
        private $routes = [];
        private $params = [];
-       private $totalVerified = 0;
+       private $totalRoutes = 0;
 
        public function __construct($url)
        {
               $this->url = $url;
        }
 
-       public function __destruct()
+       public function run()
        {
               $found = false;
-              $total = count($this->routes);
               $i = 0;
-              while ($found === false && $i < $total):
-                     // Calcula o total de rotas verificadas
-                     $this->totalVerified ++;                                          
+              while ($found === false && $i < $this->totalRoutes):
                      $route = $this->routes[$i]['route'];
                      $callback = $this->routes[$i]['callback'];
                      if ($this->check($route)) {
                             $found = true;
-                            $this->execute($callback);
+                            return $this->execute($callback);
                      }
                      $i ++;
               endwhile;
@@ -32,6 +29,7 @@ class Route {
 
        public function add($route, callable $callback)
        {
+              $this->totalRoutes ++;
               $this->routes[] = [
                   'route'    => $route,
                   'callback' => $callback
@@ -55,10 +53,10 @@ class Route {
               return implode('/', $rotaEx) == $url;
        }
 
-       public function execute($callback)
+       private function execute($callback)
        {
               // chama a callback
-              if (is_array($callback)) {                     
+              if (is_array($callback)) {
                      $class = $callback[0];
                      $method = $callback[1];
                      if (is_object($class)) {
