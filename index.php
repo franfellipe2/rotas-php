@@ -2,8 +2,8 @@
 
 require './Lib/autoload.php';
 
-$rotas = new Rotas(isset($_GET['url']) ? $_GET['url'] : '/');
-$rotas->add('/', function($params) {
+$rotas = new Route(isset($_GET['url']) ? $_GET['url'] : '/');
+$rotas->add('/', function() {
        echo 'index';
 });
 $rotas->add('despesas/mercado/{nome}', function($params) {
