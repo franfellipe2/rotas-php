@@ -6,10 +6,21 @@ class Route {
        private $routes = [];
        private $params = [];
        private $totalRoutes = 0;
+       private $found = false;
 
        public function __construct($url)
        {
               $this->url = $url;
+       }
+
+       /**
+        * Verifica se alguma rota foi encontrada
+        * Deve ser utilizado depois do método Run(), pois o método run é responsável por chamar a rota correta
+        * @return bool
+        */
+       public function found(): bool
+       {
+              return $this->found;
        }
 
        /**
@@ -21,18 +32,18 @@ class Route {
         */
        public function run()
        {
-              $found = false;
               $i = 0;
-              while ($found === false && $i < $this->totalRoutes):
+              while (!$this->found && $i < $this->totalRoutes):
                      $route = $this->routes[$i]['route'];
                      $callback = $this->routes[$i]['callback'];
                      $options = $this->routes[$i]['options'];
                      if ($this->check($route)) {
-                            $found = true;
-                            return $this->execute($callback, $options);
+                            $this->execute($callback, $options);
+                            return $this->found = true;
                      }
                      $i ++;
               endwhile;
+              return false;
        }
 
        public function add($route, callable $callback, $options = null)
@@ -52,7 +63,7 @@ class Route {
               $rotaEx = explode('/', $rota);
               if (count($urlEx) == count($rotaEx)):
                      foreach ($urlEx as $key => $value):
-                            if (strpos($rotaEx[$key], '{') === 0):
+                            if (strpos($rotaEx[$key], '{') === 0 && strrpos($rotaEx[$key], '}') !== false):
                                    $this->setParam($rotaEx[$key], $value);
                                    $rotaEx[$key] = $value;
                             endif;
