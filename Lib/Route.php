@@ -35,9 +35,9 @@ class Route {
               $i = 0;
               while (!$this->found && $i < $this->totalRoutes):
                      $route = $this->routes[$i]['route'];
-                     $callback = $this->routes[$i]['callback'];
-                     $options = $this->routes[$i]['options'];
                      if ($this->check($route)) {
+                            $callback = $this->routes[$i]['callback'];
+                            $options = $this->routes[$i]['options'];
                             $this->execute($callback, $options);
                             return $this->found = true;
                      }
