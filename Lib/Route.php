@@ -46,7 +46,7 @@ class Route {
               return false;
        }
 
-       public function add($route, callable $callback, $options = null)
+       public function add($route, $callback, $options = null)
        {
               $this->totalRoutes ++;
               $this->routes[] = [
